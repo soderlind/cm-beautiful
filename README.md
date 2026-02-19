@@ -2,6 +2,10 @@
 
 Personalise the WordPress admin with your own accent colour. Each user independently picks a colour preset or adds a custom colour via the WP colour picker. Changes apply instantly across the entire admin chrome — sidebar, admin bar, buttons, links, and focus rings — with no page reload required.
 
+<img width="100%" alt="Screenshot 2026-02-19 at 21 07 39" src="https://github.com/user-attachments/assets/9445e733-0655-4dbe-8e4f-c4f9f0f0daf6" />
+
+
+
 ## Features
 
 - **8 built-in presets** — Follow WordPress (default), Neutral Blue, Indigo, Teal, Green, Amber, Red, Slate
