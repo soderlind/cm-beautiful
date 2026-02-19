@@ -22,21 +22,11 @@ Personalise the WordPress admin with your own accent colour. Each user independe
 
 ## Installation
 
-### From a GitHub release (recommended)
+1. Download the latest [`cm-beautiful.zip`](https://github.com/soderlind/cm-beautiful/releases/latest/download/cm-beautiful.zip).
+2. In WordPress go to **Plugins → Add New → Upload Plugin** and upload the zip.
+3. Activate the plugin.
 
-1. Download `cm-beautiful.zip` from the [latest release](https://github.com/soderlind/cm-beautiful/releases/latest).
-2. In WordPress admin go to **Plugins → Add New → Upload Plugin**.
-3. Upload the zip and activate.
-
-### Manual / development
-
-```bash
-git clone https://github.com/soderlind/cm-beautiful.git
-cd cm-beautiful
-composer install --no-dev --optimize-autoloader
-```
-
-Then copy or symlink the directory inside `wp-content/plugins/` and activate.
+The plugin updates itself automatically via GitHub releases using [plugin-update-checker](https://github.com/YahnisElsts/plugin-update-checker).
 
 ## Usage
 
@@ -67,10 +57,6 @@ Night mode CSS (`html { filter: invert(1) hue-rotate(180deg) }`) is appended ind
 
 A priority-1 `admin_head` inline script captures `--wp-admin-theme-color` into `window._cmbNativeWpColor` before any override is applied. This is used by `clearLiveTheme()` to correctly restore the Follow WordPress colour when switching back to that option in the live preview.
 
-## Automatic updates
-
-The plugin uses [yahnis-elsts/plugin-update-checker](https://github.com/YahnisElsts/plugin-update-checker) to check the GitHub releases page for updates. WordPress will show the normal "update available" notice when a new release is published.
-
 ## Release process
 
 Two GitHub Actions workflows are included:
@@ -85,7 +71,9 @@ Both workflows run `composer install --no-dev` and strip dev artefacts (`.github
 ## Development
 
 ```bash
-composer install          # install all dependencies including dev
+git clone https://github.com/soderlind/cm-beautiful.git
+cd cm-beautiful
+composer install          # includes dev dependencies
 ```
 
 The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Everything else in `includes/` and `assets/` is plain PHP/CSS/JS with no build step required.
