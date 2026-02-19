@@ -56,16 +56,16 @@ require_once CMB_PLUGIN_DIR . 'includes/class-cmb-plugin.php';
 // GitHub updater
 // ---------------------------------------------------------------------------
 
-if ( ! class_exists( \Soderlind\WordPress\GitHubUpdater::class ) ) {
+if ( ! class_exists( \Soderlind\WordPress\GitHubUpdater::class) ) {
 	require_once CMB_PLUGIN_DIR . 'class-github-updater.php';
 }
 
 \Soderlind\WordPress\GitHubUpdater::init(
-	github_url:  'https://github.com/soderlind/cm-beautiful',
+	github_url: 'https://github.com/soderlind/cm-beautiful',
 	plugin_file: CMB_PLUGIN_FILE,
 	plugin_slug: 'cm-beautiful',
-	name_regex:  '/cm-beautiful\.zip/',
-	branch:      'main',
+	name_regex: '/cm-beautiful\.zip/',
+	branch: 'main',
 );
 
 // ---------------------------------------------------------------------------
