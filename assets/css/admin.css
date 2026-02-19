@@ -74,24 +74,156 @@
 }
 
 /* --------------------------------------------------------------------------
- * Night mode
+ * Night mode (toggled live by JS via body.cmb-night-mode class)
  *
- * Filter is applied to html (not body) so that position:fixed elements
- * (e.g. #wpadminbar) keep the viewport as their containing block.  Applying
- * the filter to body would make body the containing block for fixed children,
- * causing the admin bar to shift down by body's margin-top (32 px).
+ * Mirrors the PHP-injected CSS in build_night_mode_css() but scoped to the
+ * body class so the live toggle works without a page reload.
  *
- * Driven by JS (body.cmb-night-mode → html:has selector) for live toggle,
- * and by the PHP-injected `html { filter: … }` rule on every other page load.
+ * No filter property is used — filter creates new stacking contexts and
+ * re-parents position:fixed descendants, which breaks admin menu clicks.
  * -------------------------------------------------------------------------- */
-html:has(body.cmb-night-mode) {
-	filter: invert(1) hue-rotate(180deg);
+
+/* Dark palette — defined on body so custom properties cascade to all children */
+body.cmb-night-mode {
+	--cmb-nm-bg:      #1d1d1d;
+	--cmb-nm-surface: #2c2c2c;
+	--cmb-nm-raised:  #383838;
+	--cmb-nm-text:    #e4e4e4;
+	--cmb-nm-muted:   #9a9a9a;
+	--cmb-nm-border:  #4a4a4a;
+	--cmb-nm-input:   #363636;
 }
 
-body.cmb-night-mode img,
-body.cmb-night-mode video,
-body.cmb-night-mode iframe,
-body.cmb-night-mode canvas,
-body.cmb-night-mode .iris-picker {
-	filter: invert(1) hue-rotate(180deg);
+body.cmb-night-mode,
+body.cmb-night-mode #wpcontent,
+body.cmb-night-mode #wpbody,
+body.cmb-night-mode #wpbody-content {
+	background-color: var(--cmb-nm-bg);
+	color: var(--cmb-nm-text);
+}
+
+body.cmb-night-mode #adminmenuback,
+body.cmb-night-mode #adminmenuwrap,
+body.cmb-night-mode #adminmenu { background: var(--cmb-nm-surface); }
+
+body.cmb-night-mode #adminmenu li.menu-top:hover,
+body.cmb-night-mode #adminmenu li.opensub > a.menu-top,
+body.cmb-night-mode #adminmenu li > a.menu-top:focus { color: #fff; background: var(--cmb-nm-raised); }
+
+body.cmb-night-mode #adminmenu .wp-submenu,
+body.cmb-night-mode #adminmenu .wp-has-current-submenu .wp-submenu,
+body.cmb-night-mode #adminmenu .wp-has-current-submenu.opensub .wp-submenu { background: var(--cmb-nm-bg); }
+
+body.cmb-night-mode #adminmenu .current > a.menu-top,
+body.cmb-night-mode #adminmenu .wp-has-current-submenu > a.menu-top { background: var(--cmb-nm-raised); color: #fff; }
+body.cmb-night-mode ul#adminmenu a.current { background: var(--cmb-nm-raised); }
+body.cmb-night-mode #adminmenu .current:after,
+body.cmb-night-mode #adminmenu .wp-has-current-submenu:after { border-right-color: var(--cmb-nm-bg); }
+
+body.cmb-night-mode #wpadminbar { background: var(--cmb-nm-surface); }
+body.cmb-night-mode #wpadminbar .ab-top-menu > li.hover > .ab-item,
+body.cmb-night-mode #wpadminbar .ab-top-menu > li > .ab-item:focus,
+body.cmb-night-mode .no-js #wpadminbar .ab-top-menu > li:hover > .ab-item,
+body.cmb-night-mode #wpadminbar .ab-top-menu > li.ab-top-secondary.hover > .ab-item,
+body.cmb-night-mode #wpadminbar .ab-top-menu > li.ab-top-secondary > .ab-item:focus,
+body.cmb-night-mode .no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item
+{ background: var(--cmb-nm-raised); }
+
+body.cmb-night-mode #wpbody-content h1,
+body.cmb-night-mode #wpbody-content h2,
+body.cmb-night-mode #wpbody-content h3,
+body.cmb-night-mode #wpbody-content h4,
+body.cmb-night-mode #wpbody-content h5,
+body.cmb-night-mode #wpbody-content h6 { color: var(--cmb-nm-text); }
+
+body.cmb-night-mode #wpbody-content label { color: var(--cmb-nm-text); }
+body.cmb-night-mode #wpbody-content .description,
+body.cmb-night-mode #wpbody-content .howto { color: var(--cmb-nm-muted); }
+body.cmb-night-mode .form-table th,
+body.cmb-night-mode .form-table td { color: var(--cmb-nm-text); }
+
+body.cmb-night-mode input[type="text"],
+body.cmb-night-mode input[type="email"],
+body.cmb-night-mode input[type="url"],
+body.cmb-night-mode input[type="password"],
+body.cmb-night-mode input[type="number"],
+body.cmb-night-mode input[type="search"],
+body.cmb-night-mode input[type="tel"],
+body.cmb-night-mode input[type="date"],
+body.cmb-night-mode input[type="datetime-local"],
+body.cmb-night-mode textarea,
+body.cmb-night-mode select {
+	background-color: var(--cmb-nm-input);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+body.cmb-night-mode input::placeholder,
+body.cmb-night-mode textarea::placeholder { color: var(--cmb-nm-muted); }
+
+body.cmb-night-mode .wp-core-ui .button,
+body.cmb-night-mode .wp-core-ui .button-secondary {
+	background-color: var(--cmb-nm-raised);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+body.cmb-night-mode .wp-core-ui .button:hover,
+body.cmb-night-mode .wp-core-ui .button-secondary:hover {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-muted);
+	color:            var(--cmb-nm-text);
+}
+
+body.cmb-night-mode .notice,
+body.cmb-night-mode div.updated,
+body.cmb-night-mode div.error,
+body.cmb-night-mode div.settings-error {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+
+body.cmb-night-mode #wpbody-content .wp-list-table td,
+body.cmb-night-mode #wpbody-content .wp-list-table th {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+body.cmb-night-mode #wpbody-content .wp-list-table .alternate td,
+body.cmb-night-mode #wpbody-content .wp-list-table .alternate th { background-color: var(--cmb-nm-bg); }
+body.cmb-night-mode #wpbody-content .wp-list-table thead td,
+body.cmb-night-mode #wpbody-content .wp-list-table thead th { background-color: var(--cmb-nm-raised); }
+
+body.cmb-night-mode .postbox {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-border);
+}
+body.cmb-night-mode .postbox .inside { background-color: var(--cmb-nm-surface); }
+body.cmb-night-mode .postbox h2.hndle,
+body.cmb-night-mode .postbox .hndle,
+body.cmb-night-mode .postbox-header {
+	border-color: var(--cmb-nm-border);
+	color:        var(--cmb-nm-text);
+}
+
+body.cmb-night-mode .card {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-border);
+	box-shadow:       none;
+}
+
+body.cmb-night-mode #screen-meta {
+	background-color: var(--cmb-nm-surface);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+body.cmb-night-mode #screen-meta-links .show-settings {
+	background-color: var(--cmb-nm-raised);
+	border-color:     var(--cmb-nm-border);
+	color:            var(--cmb-nm-text);
+}
+
+body.cmb-night-mode #wpfooter {
+	background-color: var(--cmb-nm-bg);
+	border-top-color: var(--cmb-nm-border);
+	color:            var(--cmb-nm-muted);
 }

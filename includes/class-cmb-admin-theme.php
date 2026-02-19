@@ -14,7 +14,7 @@
  * so JS can update only the CSS custom properties on :root for an instant,
  * page-reload-free live preview.
  *
- * Night mode (filter: invert + hue-rotate on html) is orthogonal to the
+ * Night mode (explicit dark colour overrides, no filter) is orthogonal to the
  * colour choice and is emitted independently.
  *
  * On admin_head priority 1 (before our override at priority 10), a tiny inline
@@ -313,26 +313,158 @@ class CMB_Admin_Theme {
 	/**
 	 * Return the night-mode CSS rules.
 	 *
-	 * Applies `filter: invert(1) hue-rotate(180deg)` to `html` (not `body`) so
-	 * that `position:fixed` elements (e.g. #wpadminbar) keep the viewport as
-	 * their containing block.  If the filter were on `body`, body's margin-top
-	 * (32 px in WP when the toolbar is visible) would shift fixed children down.
+	 * Uses explicit dark colour overrides only — no `filter` property.
+	 * `filter` always creates a new stacking context and makes any filtered
+	 * ancestor the containing block for `position:fixed` descendants.  In WP
+	 * admin `#adminmenuback` and `#adminmenuwrap` are `position:fixed` inside
+	 * `#wpwrap`, so filtering any ancestor (html, body, or #wpwrap) re-parents
+	 * those elements and causes `#wpcontent` to paint over the sidebar —
+	 * making admin menu items unresponsive to clicks.
 	 *
-	 * The hue-rotate(180deg) keeps blues blue and greens green (round-trips the
-	 * hue wheel).  Media elements that must render naturally (images, video,
-	 * iframes, canvas, and the Iris colour-picker wheel) are re-inverted with a
-	 * second identical filter rule so they cancel out.
+	 * Instead, a dark colour palette is defined as CSS custom properties and
+	 * applied directly to the key WP admin elements.  Because only `color`,
+	 * `background-color`, and `border-color` are changed, no stacking contexts
+	 * are created and event handling is completely unaffected.
 	 *
 	 * @since  1.0.0
 	 * @return string CSS text.
 	 */
 	private function build_night_mode_css(): string {
-		return "/* --- Night mode --- */\n"
-			. "html { filter: invert(1) hue-rotate(180deg); }\n"
-			. "body img,\n"
-			. "body video,\n"
-			. "body iframe,\n"
-			. "body canvas,\n"
-			. "body .iris-picker { filter: invert(1) hue-rotate(180deg); }\n";
+		return "/* --- Night mode: direct colour overrides, no filter --- */\n"
+
+		// ── Dark palette variables ─────────────────────────────────────────
+		. ":root {\n"
+		. "\t--cmb-nm-bg:      #1d1d1d;\n"
+		. "\t--cmb-nm-surface: #2c2c2c;\n"
+		. "\t--cmb-nm-raised:  #383838;\n"
+		. "\t--cmb-nm-text:    #e4e4e4;\n"
+		. "\t--cmb-nm-muted:   #9a9a9a;\n"
+		. "\t--cmb-nm-border:  #4a4a4a;\n"
+		. "\t--cmb-nm-input:   #363636;\n"
+		. "}\n\n"
+
+		// ── Body + main content wrappers ───────────────────────────────────
+		. "body.wp-admin,\n"
+		. "#wpcontent,\n"
+		. "#wpbody,\n"
+		. "#wpbody-content { background-color: var(--cmb-nm-bg); color: var(--cmb-nm-text); }\n\n"
+
+		// ── Admin sidebar menu ─────────────────────────────────────────────
+		. "/* --- Admin sidebar menu (night mode) --- */\n"
+		. "#adminmenuback, #adminmenuwrap, #adminmenu { background: var(--cmb-nm-surface); }\n\n"
+		. "#adminmenu li.menu-top:hover,\n"
+		. "#adminmenu li.opensub > a.menu-top,\n"
+		. "#adminmenu li > a.menu-top:focus { color: #fff; background: var(--cmb-nm-raised); }\n\n"
+		. "#adminmenu .wp-submenu,\n"
+		. "#adminmenu .wp-has-current-submenu .wp-submenu,\n"
+		. "#adminmenu .wp-has-current-submenu.opensub .wp-submenu { background: var(--cmb-nm-bg); }\n\n"
+		. "#adminmenu .current > a.menu-top,\n"
+		. "#adminmenu .wp-has-current-submenu > a.menu-top { background: var(--cmb-nm-raised); color: #fff; }\n"
+		. "ul#adminmenu a.current { background: var(--cmb-nm-raised); }\n"
+		. "#adminmenu .current:after,\n"
+		. "#adminmenu .wp-has-current-submenu:after { border-right-color: var(--cmb-nm-bg); }\n\n"
+
+		// ── Admin bar ─────────────────────────────────────────────────────
+		. "/* --- Admin bar (night mode) --- */\n"
+		. "#wpadminbar { background: var(--cmb-nm-surface); }\n"
+		. "#wpadminbar .ab-top-menu > li.hover > .ab-item,\n"
+		. "#wpadminbar .ab-top-menu > li > .ab-item:focus,\n"
+		. ".no-js #wpadminbar .ab-top-menu > li:hover > .ab-item,\n"
+		. "#wpadminbar .ab-top-menu > li.ab-top-secondary.hover > .ab-item,\n"
+		. "#wpadminbar .ab-top-menu > li.ab-top-secondary > .ab-item:focus,\n"
+		. ".no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item "
+		. "{ background: var(--cmb-nm-raised); }\n\n"
+
+		// ── Headings ───────────────────────────────────────────────────────
+		. "#wpbody-content h1, #wpbody-content h2, #wpbody-content h3,\n"
+		. "#wpbody-content h4, #wpbody-content h5, #wpbody-content h6 { color: var(--cmb-nm-text); }\n\n"
+
+		// ── Labels + descriptions ──────────────────────────────────────────
+		. "#wpbody-content label { color: var(--cmb-nm-text); }\n"
+		. "#wpbody-content .description,\n"
+		. "#wpbody-content .howto { color: var(--cmb-nm-muted); }\n"
+		. ".form-table th, .form-table td { color: var(--cmb-nm-text); }\n\n"
+
+		// ── Form inputs ────────────────────────────────────────────────────
+		. "input[type=\"text\"], input[type=\"email\"], input[type=\"url\"],\n"
+		. "input[type=\"password\"], input[type=\"number\"], input[type=\"search\"],\n"
+		. "input[type=\"tel\"], input[type=\"date\"], input[type=\"datetime-local\"],\n"
+		. "textarea, select {\n"
+		. "\tbackground-color: var(--cmb-nm-input);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n"
+		. "input::placeholder, textarea::placeholder { color: var(--cmb-nm-muted); }\n\n"
+
+		// ── Secondary buttons ──────────────────────────────────────────────
+		. ".wp-core-ui .button,\n"
+		. ".wp-core-ui .button-secondary {\n"
+		. "\tbackground-color: var(--cmb-nm-raised);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n"
+		. ".wp-core-ui .button:hover,\n"
+		. ".wp-core-ui .button-secondary:hover {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-muted);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n\n"
+
+		// ── Admin notices ──────────────────────────────────────────────────
+		. ".notice, div.updated, div.error, div.settings-error {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n"
+		. ".notice p, div.updated p, div.error p { color: var(--cmb-nm-text); }\n\n"
+
+		// ── WP list tables ─────────────────────────────────────────────────
+		. "#wpbody-content .wp-list-table td,\n"
+		. "#wpbody-content .wp-list-table th {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n"
+		. "#wpbody-content .wp-list-table .alternate td,\n"
+		. "#wpbody-content .wp-list-table .alternate th { background-color: var(--cmb-nm-bg); }\n"
+		. "#wpbody-content .wp-list-table thead td,\n"
+		. "#wpbody-content .wp-list-table thead th { background-color: var(--cmb-nm-raised); }\n\n"
+
+		// ── Metaboxes / postboxes ──────────────────────────────────────────
+		. ".postbox {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "}\n"
+		. ".postbox .inside { background-color: var(--cmb-nm-surface); }\n"
+		. ".postbox h2.hndle, .postbox .hndle, .postbox-header {\n"
+		. "\tborder-color: var(--cmb-nm-border);\n"
+		. "\tcolor:        var(--cmb-nm-text);\n"
+		. "}\n\n"
+
+		// ── Cards ──────────────────────────────────────────────────────────
+		. ".card {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tbox-shadow:       none;\n"
+		. "}\n\n"
+
+		// ── Screen options / help ──────────────────────────────────────────
+		. "#screen-meta {\n"
+		. "\tbackground-color: var(--cmb-nm-surface);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n"
+		. "#screen-meta-links .show-settings {\n"
+		. "\tbackground-color: var(--cmb-nm-raised);\n"
+		. "\tborder-color:     var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-text);\n"
+		. "}\n\n"
+
+		// ── Footer ─────────────────────────────────────────────────────────
+		. "#wpfooter {\n"
+		. "\tbackground-color: var(--cmb-nm-bg);\n"
+		. "\tborder-top-color: var(--cmb-nm-border);\n"
+		. "\tcolor:            var(--cmb-nm-muted);\n"
+		. "}\n";
 	}
 }

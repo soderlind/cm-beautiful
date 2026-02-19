@@ -34,6 +34,15 @@ final class CMB_Plugin {
 	private static ?CMB_Plugin $instance = null;
 
 	/**
+	 * Whether init() has already run.
+	 * Prevents duplicate hook registration if init() is called more than once.
+	 *
+	 * @since 1.0.0
+	 * @var   bool
+	 */
+	private bool $initialized = false;
+
+	/**
 	 * Profile fields handler.
 	 *
 	 * @since 1.0.0
@@ -80,6 +89,11 @@ final class CMB_Plugin {
 	 * @return void
 	 */
 	public function init(): void {
+		if ( $this->initialized ) {
+			return;
+		}
+		$this->initialized = true;
+
 		load_plugin_textdomain(
 			'cm-beautiful',
 			false,

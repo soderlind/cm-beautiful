@@ -12,7 +12,7 @@ Personalise the WordPress admin with your own accent colour. Each user independe
 - **Custom colour picker** — any hex colour via the WordPress Iris picker
 - **Live preview** — the admin chrome updates in real time as you pick, without saving
 - **Themed background** — the admin page background tints to complement the chosen accent colour
-- **Night mode** — one checkbox inverts the entire admin using `filter: invert(1) hue-rotate(180deg)`; images, video, iframes and the colour picker are re-inverted so they render normally
+- **Night mode** — one checkbox applies a dark colour theme to the entire admin using explicit CSS colour overrides; no `filter` property is used, so stacking contexts and event handling are completely unaffected
 - **Per-user** — each user's preference is stored in user meta and only affects their own session
 - **Follow WordPress** — selecting this option emits no override CSS at all; WordPress manages its own admin chrome entirely
 - **Clean uninstall** — deleting the plugin removes all `cmb_ui_*` user meta via paginated batch cleanup
@@ -53,7 +53,7 @@ The chosen colour is applied to every admin screen immediately on next page load
 
 For **Follow WordPress** no CSS is emitted — WordPress manages its own chrome and this plugin does not interfere.
 
-Night mode CSS (`html { filter: invert(1) hue-rotate(180deg) }`) is appended independently of the colour choice.
+When night mode is enabled, a dark CSS custom property palette (`--cmb-nm-bg`, `--cmb-nm-surface`, `--cmb-nm-raised`, `--cmb-nm-text`, `--cmb-nm-muted`, `--cmb-nm-border`, `--cmb-nm-input`) is emitted to `:root`, and direct `background-color`, `color`, and `border-color` overrides are applied to the key WP admin elements. No `filter` property is used — `filter` creates new stacking contexts which re-parent `position: fixed` elements and cause admin menu items to stop responding to clicks.
 
 ### JS layer (live preview)
 
@@ -81,6 +81,19 @@ composer install          # includes dev dependencies
 ```
 
 The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Everything else in `includes/` and `assets/` is plain PHP/CSS/JS with no build step required.
+
+## Changelog
+
+### 1.0.1
+
+- Night mode rewritten: replaced `filter: invert()` with explicit `background-color`, `color`, and `border-color` overrides across all key admin elements — sidebar, admin bar, content area, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, and footer. No `filter` property is used, avoiding the stacking-context issues that broke admin menu clicks.
+- Night mode now applies dark colours to the admin sidebar and admin bar regardless of the active accent colour preset.
+- Fixed live-preview race condition: the Iris `change` callback now guards against the `follow_wp` option.
+- Fixed `CMB_Plugin::init()` double-call guard to prevent duplicate hook registration.
+
+### 1.0.0
+
+Initial release.
 
 ## Licence
 

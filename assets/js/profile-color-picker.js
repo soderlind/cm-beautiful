@@ -279,8 +279,16 @@
 			/**
 			 * Fired on every colour change (drag, text entry, paste).
 			 * ui.color is an Iris Color instance; .toString() returns #rrggbb.
+			 *
+			 * Guard against follow_wp being selected: Iris may fire `change`
+			 * on initialisation (or when the field is focused) before the user
+			 * has interacted with it, which would incorrectly override the
+			 * follow_wp live preview with the stale custom-accent value.
 			 */
 			change: function ( _event, ui ) {
+				if ( 'follow_wp' === $presetSelect.val() ) {
+					return;
+				}
 				var hex = normalizeHex( ui.color.toString() );
 				$customSwatch.css( 'background-color', hex );
 				applyLiveTheme( hex );

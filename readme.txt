@@ -4,7 +4,7 @@ Tags:              admin, colour, color, theme, personalise, night mode, dark mo
 Requires at least: 6.8
 Tested up to:      6.9
 Requires PHP:      8.3
-Stable tag:        1.0.0
+Stable tag:        1.0.1
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Color Me Beautiful lets each WordPress user independently choose an accent colou
 * Custom colour picker — choose any colour using the WordPress Iris colour picker
 * Live preview — see the colour applied across the admin in real time as you pick, before saving
 * Themed background — the admin page background tints subtly to complement the chosen accent colour
-* Night mode — a single checkbox inverts the entire admin interface; images, video, iframes and the colour picker wheel are automatically re-corrected
+* Night mode — a single checkbox applies a dark colour theme to the entire admin interface using explicit CSS colour overrides; no CSS filter is used, so stacking contexts and event handling are completely unaffected
 * Per-user settings — each user's preferences are stored in user meta and affect only their own session
 * Follow WordPress — delegates colour management entirely to the active WordPress admin colour scheme, emitting no override CSS
 * Clean uninstall — deleting the plugin removes all stored user preferences via a paginated batch process
@@ -57,7 +57,7 @@ Yes. Preferences are stored as standard WordPress user meta (`cmb_ui_preset`, `c
 
 = What is night mode? =
 
-Night mode applies a CSS `filter: invert(1) hue-rotate(180deg)` to the `html` element, which flips all colours to produce a dark interface. The `hue-rotate(180deg)` component preserves the hue of saturated colours so blues stay blue and greens stay green. Images, video, iframes, canvas and the colour picker wheel are automatically re-inverted so they display normally.
+Night mode applies a dark colour palette to the WordPress admin interface using explicit `background-color`, `color`, and `border-color` overrides on the key admin elements (body, content wrappers, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, and footer). A set of CSS custom properties (`--cmb-nm-bg`, `--cmb-nm-surface`, `--cmb-nm-raised`, `--cmb-nm-text`, `--cmb-nm-muted`, `--cmb-nm-border`, `--cmb-nm-input`) defines the dark palette. No `filter` property is used — `filter` creates new CSS stacking contexts that re-parent `position: fixed` descendants and cause admin menu items to stop responding to clicks.
 
 = Does the plugin add anything to the database permanently? =
 
@@ -75,17 +75,26 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 
 == Changelog ==
 
+= 1.0.1 =
+* Night mode rewritten: replaced `filter: invert()` approach with explicit `background-color`, `color`, and `border-color` overrides across all key admin elements (sidebar, admin bar, content area, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, footer). No `filter` property is used — avoids stacking-context issues that broke admin menu clicks.
+* Night mode now covers the admin sidebar and admin bar with dark colours independently of the accent colour choice.
+* Fixed live-preview race condition: the Iris `change` callback now guards against the `follow_wp` option to prevent incorrect colour application during preset selection.
+* Fixed `CMB_Plugin::init()` to prevent duplicate hook registration if called more than once.
+
 = 1.0.0 =
 * Initial release.
 * Per-user colour presets (Follow WordPress, Neutral Blue, Indigo, Teal, Green, Amber, Red, Slate).
 * Custom accent colour picker via WordPress Iris.
 * Live preview on the profile page.
 * Themed admin background (10 % tint of the accent colour).
-* Night mode via CSS filter invert + hue-rotate.
+* Night mode via explicit dark CSS colour overrides (no filter); palette defined as CSS custom properties.
 * GitHub-based automatic update checker.
 * Clean paginated uninstall routine.
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+Night mode CSS reworked; no database changes. Safe to update.
 
 = 1.0.0 =
 Initial release — no upgrade steps required.

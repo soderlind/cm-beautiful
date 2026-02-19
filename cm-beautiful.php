@@ -3,7 +3,7 @@
  * Plugin Name:       Color Me Beautiful
  * Plugin URI:        https://github.com/soderlind/cm-beautiful
  * Description:       Personalise the WordPress admin with your own accent colour. Per-user preset dropdown and custom colour picker, applied via CSS custom properties on this plugin's admin screens.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.8
  * Requires PHP:      8.3
  * Author:            Per Soderlind
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ---------------------------------------------------------------------------
 
 /** Plugin version string. */
-define( 'CMB_VERSION', '1.0.0' );
+define( 'CMB_VERSION', '1.0.1' );
 
 /** Absolute path to the main plugin file. */
 define( 'CMB_PLUGIN_FILE', __FILE__ );
