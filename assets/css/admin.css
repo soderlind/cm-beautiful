@@ -1,0 +1,97 @@
+/*
+ * Color Me Beautiful – Admin Styles
+ *
+ * CSS custom properties are injected via PHP (CMB_Admin_Theme::inject_css_vars).
+ * Fallback values keep the UI usable before the <style> tag is parsed.
+ *
+ * @package cm-beautiful
+ */
+
+/* --------------------------------------------------------------------------
+ * CSS variable fallbacks (overridden by PHP-injected :root / .cmb-beautiful
+ * -------------------------------------------------------------------------- */
+.cmb-beautiful {
+	--cmb-accent: #2271b1;
+	--cmb-accent-contrast: #ffffff;
+}
+
+/* --------------------------------------------------------------------------
+ * Color swatch (profile page, next to dropdown and color picker)
+ * -------------------------------------------------------------------------- */
+.cmb-swatch {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	vertical-align: middle;
+	margin-left: 8px;
+	transition: background-color 0.15s ease;
+	background-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+ * Demo admin page – card
+ * -------------------------------------------------------------------------- */
+.cmb-beautiful .cmb-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-top: 4px solid var(--cmb-accent);
+	border-radius: 4px;
+	padding: 20px 24px;
+	margin-top: 20px;
+	max-width: 640px;
+}
+
+.cmb-beautiful .cmb-card p {
+	margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Demo admin page – alert
+ * -------------------------------------------------------------------------- */
+.cmb-beautiful .cmb-alert {
+	border-left: 4px solid var(--cmb-accent);
+	background: #f6f7f7;
+	padding: 12px 16px;
+	margin: 16px 0;
+	font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+ * Demo admin page – primary button override
+ *
+ * !important required because WordPress's own admin stylesheet uses
+ * !important on button colours.
+ * -------------------------------------------------------------------------- */
+.cmb-beautiful .button-primary,
+.cmb-beautiful .button-primary:focus,
+.cmb-beautiful .button-primary:hover {
+	background: var(--cmb-accent) !important;
+	border-color: var(--cmb-accent) !important;
+	color: var(--cmb-accent-contrast) !important;
+	box-shadow: none !important;
+}
+
+/* --------------------------------------------------------------------------
+ * Night mode
+ *
+ * Filter is applied to html (not body) so that position:fixed elements
+ * (e.g. #wpadminbar) keep the viewport as their containing block.  Applying
+ * the filter to body would make body the containing block for fixed children,
+ * causing the admin bar to shift down by body's margin-top (32 px).
+ *
+ * Driven by JS (body.cmb-night-mode → html:has selector) for live toggle,
+ * and by the PHP-injected `html { filter: … }` rule on every other page load.
+ * -------------------------------------------------------------------------- */
+html:has(body.cmb-night-mode) {
+	filter: invert(1) hue-rotate(180deg);
+}
+
+body.cmb-night-mode img,
+body.cmb-night-mode video,
+body.cmb-night-mode iframe,
+body.cmb-night-mode canvas,
+body.cmb-night-mode .iris-picker {
+	filter: invert(1) hue-rotate(180deg);
+}

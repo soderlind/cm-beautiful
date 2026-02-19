@@ -1,0 +1,19 @@
+{
+    "name": "soderlind/cm-beautiful",
+    "description": "Personalise the WordPress admin with your own accent colour.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Per Soderlind",
+            "homepage": "https://soderlind.no"
+        }
+    ],
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^5.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

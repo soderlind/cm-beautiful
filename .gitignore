@@ -1,0 +1,19 @@
+# Composer
+vendor/
+composer.lock
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.vscode/
+.idea/
+*.swp
+
+# Build / test artefacts
+*.log
+.phpunit.result.cache
