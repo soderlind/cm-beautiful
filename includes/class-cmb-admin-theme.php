@@ -281,6 +281,7 @@ class CMB_Admin_Theme {
 		// Text colors use WCAG-computed contrast vars for accessibility.
 		$css .= "/* --- Admin bar (WCAG contrast) --- */\n"
 			. "#wpadminbar { background: {$a}; }\n"
+			// Hover/focus states on top-level items.
 			. "#wpadminbar .ab-top-menu > li.hover > .ab-item,\n"
 			. "#wpadminbar .ab-top-menu > li > .ab-item:focus,\n"
 			. ".no-js #wpadminbar .ab-top-menu > li:hover > .ab-item,\n"
@@ -288,9 +289,25 @@ class CMB_Admin_Theme {
 			. "#wpadminbar .ab-top-menu > li.ab-top-secondary > .ab-item:focus,\n"
 			. ".no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item "
 			. "{ background: {$d20}; color: {$ec20}; }\n"
-			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a,\n"
-			. "#wpadminbar .ab-item { color: {$ec}; opacity: 0.85; }\n"
-			. "#wpadminbar .ab-item:hover { color: {$ec}; opacity: 1; }\n\n";
+			// All .ab-* text elements use WCAG contrast.
+			. "#wpadminbar .ab-item,\n"
+			. "#wpadminbar .ab-label,\n"
+			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a { color: {$ec}; opacity: 0.85; }\n"
+			. "#wpadminbar .ab-item:hover,\n"
+			. "#wpadminbar .ab-label:hover { color: {$ec}; opacity: 1; }\n"
+			// Icons in admin bar.
+			. "#wpadminbar .ab-icon,\n"
+			. "#wpadminbar .ab-icon:before,\n"
+			. "#wpadminbar .ab-item .ab-icon:before { color: {$ec}; }\n"
+			// Submenus use darkened background with appropriate contrast.
+			. "#wpadminbar .ab-submenu,\n"
+			. "#wpadminbar .ab-sub-wrapper { background: {$d20}; }\n"
+			. "#wpadminbar .ab-submenu .ab-item,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item { color: {$ec20}; opacity: 0.85; }\n"
+			. "#wpadminbar .ab-submenu .ab-item:hover,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item:hover,\n"
+			. "#wpadminbar .ab-submenu .ab-item:focus,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item:focus { color: {$ec20}; opacity: 1; }\n\n";
 
 		// ── Primary buttons ───────────────────────────────────────────────────
 		$css .= "/* --- Primary buttons --- */\n"
