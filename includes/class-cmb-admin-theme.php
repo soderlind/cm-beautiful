@@ -249,7 +249,10 @@ class CMB_Admin_Theme {
 
 			. "#adminmenu a { color: {$ec}; opacity: 0.85; }\n"
 			. "#adminmenu a:hover { color: {$ec}; opacity: 1; }\n"
-			. "#adminmenu div.wp-menu-image:before { color: {$ec}; opacity: 0.6; }\n\n"
+			. "#adminmenu div.wp-menu-image:before { color: {$ec}; opacity: 0.6; }\n"
+			. "#adminmenu .collapse-button-label { color: {$ec}; }\n"
+			. "#collapse-button { color: {$ec}; }\n"
+			. "#collapse-button .collapse-button-icon { fill: {$ec}; }\n\n"
 
 			. "#adminmenu li.menu-top:hover,\n"
 			. "#adminmenu li.opensub > a.menu-top,\n"
@@ -286,8 +289,8 @@ class CMB_Admin_Theme {
 			. ".no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item "
 			. "{ background: {$d20}; color: {$ec20}; }\n"
 			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a,\n"
-			. "#wpadminbar .ab-item,\n"
-			. "#wpadminbar .ab-item:hover { color: {$ec}; opacity: 0.85; }\n\n";
+			. "#wpadminbar .ab-item { color: {$ec}; opacity: 0.85; }\n"
+			. "#wpadminbar .ab-item:hover { color: {$ec}; opacity: 1; }\n\n";
 
 		// ── Primary buttons ───────────────────────────────────────────────────
 		$css .= "/* --- Primary buttons --- */\n"
