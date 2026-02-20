@@ -10,6 +10,7 @@ Personalise the WordPress admin with your own accent colour. Each user independe
 
 - **8 built-in presets** — Follow WordPress (default), Neutral Blue, Indigo, Teal, Green, Amber, Red, Slate
 - **Custom colour picker** — any hex colour via the WordPress Iris picker
+- **WCAG 2.1 contrast** — text automatically switches between black and white based on accent luminance for readable contrast
 - **Live preview** — the admin chrome updates in real time as you pick, without saving
 - **Themed background** — the admin page background tints to complement the chosen accent colour
 - **Night mode** — one checkbox applies a dark colour theme to the entire admin using explicit CSS colour overrides; no `filter` property is used, so stacking contexts and event handling are completely unaffected
@@ -78,38 +79,19 @@ Both workflows run `composer install --no-dev` and strip dev artefacts (`.github
 git clone https://github.com/soderlind/cm-beautiful.git
 cd cm-beautiful
 composer install          # includes dev dependencies
+npm install               # for JS testing
+```
+
+```bash
+composer test             # run PHP tests (Pest)
+npm test                  # run JS tests (Vitest)
 ```
 
 The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Everything else in `includes/` and `assets/` is plain PHP/CSS/JS with no build step required.
 
 ## Changelog
 
-### 1.1.0
-
-- **Full WCAG 2.1 contrast compliance**: All admin chrome elements (sidebar menu, admin bar, collapse button) now use calculated contrast colors based on relative luminance.
-- Contrast CSS variables for darkened accent tones (`--cmb-accent-d10-contrast`, `--cmb-accent-d20-contrast`, `--cmb-accent-d30-contrast`) ensure readable text on hover/active states.
-- Admin bar elements (`.ab-item`, `.ab-icon`, `.ab-label`, `.ab-submenu`) receive proper contrast colors.
-- JavaScript live preview applies contrast colors in real time during custom color selection.
-- Higher-specificity CSS selectors ensure contrast overrides WordPress core admin bar styles.
-
-### 1.0.2
-
-- **WCAG contrast compliance**: Admin sidebar and admin bar text colors now automatically switch between black and white based on the chosen accent color's luminance, ensuring readable contrast for any custom color.
-- Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts (`npm run i18n`).
-- Added Pest 4 test suite with Brain Monkey for WordPress function mocking (`composer test`).
-- Added Vitest 4 for JavaScript unit testing (`npm test`).
-- Preset labels are now translation-ready via `get_preset_label()` method.
-
-### 1.0.1
-
-- Night mode rewritten: replaced `filter: invert()` with explicit `background-color`, `color`, and `border-color` overrides across all key admin elements — sidebar, admin bar, content area, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, and footer. No `filter` property is used, avoiding the stacking-context issues that broke admin menu clicks.
-- Night mode now applies dark colours to the admin sidebar and admin bar regardless of the active accent colour preset.
-- Fixed live-preview race condition: the Iris `change` callback now guards against the `follow_wp` option.
-- Fixed `CMB_Plugin::init()` double-call guard to prevent duplicate hook registration.
-
-### 1.0.0
-
-Initial release.
+See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Licence
 
