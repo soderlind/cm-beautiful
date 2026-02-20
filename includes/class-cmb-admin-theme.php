@@ -289,25 +289,48 @@ class CMB_Admin_Theme {
 			. "#wpadminbar .ab-top-menu > li.ab-top-secondary > .ab-item:focus,\n"
 			. ".no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item "
 			. "{ background: {$d20}; color: {$ec20}; }\n"
-			// All .ab-* text elements use WCAG contrast.
+			// All admin bar text elements use WCAG contrast (comprehensive).
+			. "#wpadminbar,\n"
+			. "#wpadminbar a,\n"
 			. "#wpadminbar .ab-item,\n"
 			. "#wpadminbar .ab-label,\n"
-			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a { color: {$ec}; opacity: 0.85; }\n"
+			. "#wpadminbar .ab-empty-item,\n"
+			. "#wpadminbar .quicklinks .ab-empty-item,\n"
+			. "#wpadminbar > #wp-toolbar span,\n"
+			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a,\n"
+			. "#wpadminbar #wp-admin-bar-site-name > .ab-item,\n"
+			. "#wpadminbar #wp-admin-bar-my-account > .ab-item { color: {$ec}; }\n"
+			// Hover states.
+			. "#wpadminbar a:hover,\n"
 			. "#wpadminbar .ab-item:hover,\n"
-			. "#wpadminbar .ab-label:hover { color: {$ec}; opacity: 1; }\n"
-			// Icons in admin bar.
+			. "#wpadminbar .ab-label:hover { color: {$ec}; }\n"
+			// Icons in admin bar (dashicons, SVG, etc).
 			. "#wpadminbar .ab-icon,\n"
 			. "#wpadminbar .ab-icon:before,\n"
-			. "#wpadminbar .ab-item .ab-icon:before { color: {$ec}; }\n"
+			. "#wpadminbar .ab-item .ab-icon:before,\n"
+			. "#wpadminbar #adminbarsearch:before,\n"
+			. "#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before,\n"
+			. "#wpadminbar .quicklinks li a:before { color: {$ec}; }\n"
+			// WP logo specific.
+			. "#wpadminbar #wp-admin-bar-wp-logo > .ab-item { color: {$ec}; }\n"
+			. "#wpadminbar #wp-admin-bar-wp-logo:hover > .ab-item { background: {$d20}; color: {$ec20}; }\n"
 			// Submenus use darkened background with appropriate contrast.
 			. "#wpadminbar .ab-submenu,\n"
-			. "#wpadminbar .ab-sub-wrapper { background: {$d20}; }\n"
+			. "#wpadminbar .ab-sub-wrapper,\n"
+			. "#wpadminbar ul.ab-submenu,\n"
+			. "#wpadminbar .quicklinks .menupop ul.ab-sub-secondary { background: {$d20}; }\n"
 			. "#wpadminbar .ab-submenu .ab-item,\n"
-			. "#wpadminbar .ab-sub-wrapper .ab-item { color: {$ec20}; opacity: 0.85; }\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item,\n"
+			. "#wpadminbar .ab-submenu a,\n"
+			. "#wpadminbar .ab-sub-wrapper a { color: {$ec20}; }\n"
 			. "#wpadminbar .ab-submenu .ab-item:hover,\n"
 			. "#wpadminbar .ab-sub-wrapper .ab-item:hover,\n"
 			. "#wpadminbar .ab-submenu .ab-item:focus,\n"
-			. "#wpadminbar .ab-sub-wrapper .ab-item:focus { color: {$ec20}; opacity: 1; }\n\n";
+			. "#wpadminbar .ab-sub-wrapper .ab-item:focus,\n"
+			. "#wpadminbar .ab-submenu a:hover,\n"
+			. "#wpadminbar .ab-sub-wrapper a:hover { color: {$ec20}; background: {$d30}; }\n"
+			// Account/avatar area.
+			. "#wpadminbar #wp-admin-bar-my-account.with-avatar > a img { border-color: {$ec}; }\n\n";
 
 		// ── Primary buttons ───────────────────────────────────────────────────
 		$css .= "/* --- Primary buttons --- */\n"
