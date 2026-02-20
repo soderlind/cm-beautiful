@@ -304,6 +304,11 @@ class CMB_Admin_Theme {
 			. "#wpadminbar a:hover,\n"
 			. "#wpadminbar .ab-item:hover,\n"
 			. "#wpadminbar .ab-label:hover { color: {$ec}; }\n"
+			// .ab-label in various contexts (My Account display name, etc).
+			. "#wpadminbar .ab-label,\n"
+			. "#wpadminbar #wp-admin-bar-my-account .ab-label,\n"
+			. "#wpadminbar .ab-top-menu > li > .ab-item > .ab-label,\n"
+			. "#wpadminbar .display-name { color: {$ec}; }\n"
 			// Icons in admin bar (dashicons, SVG, etc).
 			. "#wpadminbar .ab-icon,\n"
 			. "#wpadminbar .ab-icon:before,\n"
@@ -321,6 +326,8 @@ class CMB_Admin_Theme {
 			. "#wpadminbar .quicklinks .menupop ul.ab-sub-secondary { background: {$d20}; }\n"
 			. "#wpadminbar .ab-submenu .ab-item,\n"
 			. "#wpadminbar .ab-sub-wrapper .ab-item,\n"
+			. "#wpadminbar .ab-submenu .ab-label,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-label,\n"
 			. "#wpadminbar .ab-submenu a,\n"
 			. "#wpadminbar .ab-sub-wrapper a { color: {$ec20}; }\n"
 			. "#wpadminbar .ab-submenu .ab-item:hover,\n"
