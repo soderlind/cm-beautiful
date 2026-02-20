@@ -305,10 +305,14 @@ class CMB_Admin_Theme {
 			. "#wpadminbar .ab-item:hover,\n"
 			. "#wpadminbar .ab-label:hover { color: {$ec}; }\n"
 			// .ab-label in various contexts (My Account display name, etc).
+			// Using !important to override WP core's high-specificity selectors.
 			. "#wpadminbar .ab-label,\n"
 			. "#wpadminbar #wp-admin-bar-my-account .ab-label,\n"
 			. "#wpadminbar .ab-top-menu > li > .ab-item > .ab-label,\n"
-			. "#wpadminbar .display-name { color: {$ec}; }\n"
+			. "#wpadminbar .quicklinks .ab-label,\n"
+			. "#wpadminbar .quicklinks > ul > li > a > .ab-label,\n"
+			. "#wpadminbar .display-name,\n"
+			. "#wpadminbar #wp-admin-bar-my-account .display-name { color: {$ec} !important; }\n"
 			// Icons in admin bar (dashicons, SVG, etc).
 			. "#wpadminbar .ab-icon,\n"
 			. "#wpadminbar .ab-icon:before,\n"
@@ -326,10 +330,11 @@ class CMB_Admin_Theme {
 			. "#wpadminbar .quicklinks .menupop ul.ab-sub-secondary { background: {$d20}; }\n"
 			. "#wpadminbar .ab-submenu .ab-item,\n"
 			. "#wpadminbar .ab-sub-wrapper .ab-item,\n"
-			. "#wpadminbar .ab-submenu .ab-label,\n"
-			. "#wpadminbar .ab-sub-wrapper .ab-label,\n"
 			. "#wpadminbar .ab-submenu a,\n"
 			. "#wpadminbar .ab-sub-wrapper a { color: {$ec20}; }\n"
+			// Submenu .ab-label needs !important for specificity.
+			. "#wpadminbar .ab-submenu .ab-label,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-label { color: {$ec20} !important; }\n"
 			. "#wpadminbar .ab-submenu .ab-item:hover,\n"
 			. "#wpadminbar .ab-sub-wrapper .ab-item:hover,\n"
 			. "#wpadminbar .ab-submenu .ab-item:focus,\n"
