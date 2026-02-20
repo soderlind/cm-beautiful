@@ -26,8 +26,9 @@ class CMB_Profile {
 	/**
 	 * Curated colour presets available to users.
 	 *
-	 * Keys are stored in user meta.  'hex' is null for the "follow WordPress"
+	 * Keys are stored in user meta. 'hex' is null for the "follow WordPress"
 	 * option, which delegates to the active WP admin colour scheme.
+	 * Labels are translation keys — use get_preset_label() for display.
 	 *
 	 * @since 1.0.0
 	 * @var   array<string, array{label: string, hex: string|null}>
@@ -42,6 +43,31 @@ class CMB_Profile {
 		'red'          => [ 'label' => 'Red', 'hex' => '#b91c1c' ],
 		'slate'        => [ 'label' => 'Slate', 'hex' => '#334155' ],
 	];
+
+	/**
+	 * Get translated label for a preset.
+	 *
+	 * Labels cannot be translated in the PRESETS constant because __() is a
+	 * runtime function. This method provides the translated version.
+	 *
+	 * @since 1.0.1
+	 * @param  string $key Preset key.
+	 * @return string      Translated label, or the key if not found.
+	 */
+	public static function get_preset_label( string $key ): string {
+		$labels = [
+			'follow_wp'    => __( 'Follow WordPress', 'cm-beautiful' ),
+			'neutral_blue' => __( 'Neutral Blue', 'cm-beautiful' ),
+			'indigo'       => __( 'Indigo', 'cm-beautiful' ),
+			'teal'         => __( 'Teal', 'cm-beautiful' ),
+			'green'        => __( 'Green', 'cm-beautiful' ),
+			'amber'        => __( 'Amber', 'cm-beautiful' ),
+			'red'          => __( 'Red', 'cm-beautiful' ),
+			'slate'        => __( 'Slate', 'cm-beautiful' ),
+		];
+
+		return $labels[ $key ] ?? $key;
+	}
 
 	/**
 	 * User-meta key for the selected preset.
@@ -143,7 +169,7 @@ class CMB_Profile {
 					<?php foreach ( self::PRESETS as $key => $data ) : ?>
 						<option value="<?php echo esc_attr( $key ); ?>" data-hex="<?php echo esc_attr( $data[ 'hex' ] ?? '' ); ?>"
 							<?php selected( $preset, $key ); ?>>
-							<?php echo esc_html( $data[ 'label' ] ); ?>
+						<?php echo esc_html( self::get_preset_label( $key ) ); ?>
 						</option>
 					<?php endforeach; ?>
 				</select>

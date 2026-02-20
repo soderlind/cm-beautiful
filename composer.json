@@ -14,6 +14,23 @@
     },
     "config": {
         "optimize-autoloader": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "require-dev": {
+        "brain/monkey": "^2.6",
+        "pestphp/pest": "^4.4.1",
+        "php-stubs/wordpress-stubs": "^6.9"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "test:coverage": "pest --coverage"
     }
 }

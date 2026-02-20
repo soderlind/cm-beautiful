@@ -4,6 +4,7 @@ composer.lock
 
 # Node
 node_modules/
+package-lock.json
 
 # OS
 .DS_Store
@@ -17,3 +18,5 @@ Thumbs.db
 # Build / test artefacts
 *.log
 .phpunit.result.cache
+.phpunit.cache/
+coverage/

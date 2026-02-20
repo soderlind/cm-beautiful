@@ -1,0 +1,23 @@
+{
+	"name": "cm-beautiful",
+	"version": "1.0.2",
+	"description": "Personalise the WordPress admin with your own accent colour.",
+	"author": "Per Soderlind",
+	"license": "GPL-2.0-or-later",
+	"type": "module",
+	"scripts": {
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"i18n": "npm run i18n:make-pot && npm run i18n:update-po && npm run i18n:make-mo && npm run i18n:make-json && npm run i18n:make-php",
+		"i18n:make-pot": "wp i18n make-pot . languages/cm-beautiful.pot --exclude=node_modules,vendor,tests,build --domain=cm-beautiful",
+		"i18n:update-po": "wp i18n update-po languages/cm-beautiful.pot languages/",
+		"i18n:make-mo": "wp i18n make-mo languages/",
+		"i18n:make-json": "wp i18n make-json languages/ --no-purge --use-map=i18n-map.json",
+		"i18n:make-php": "wp i18n make-php languages/"
+	},
+	"devDependencies": {
+		"jsdom": "^28.1.0",
+		"vitest": "^4.0.18"
+	}
+}

@@ -84,6 +84,13 @@ The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Ev
 
 ## Changelog
 
+### 1.0.2
+
+- Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts (`npm run i18n`).
+- Added Pest 4 test suite with Brain Monkey for WordPress function mocking (`composer test`).
+- Added Vitest 4 for JavaScript unit testing (`npm test`).
+- Preset labels are now translation-ready via `get_preset_label()` method.
+
 ### 1.0.1
 
 - Night mode rewritten: replaced `filter: invert()` with explicit `background-color`, `color`, and `border-color` overrides across all key admin elements — sidebar, admin bar, content area, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, and footer. No `filter` property is used, avoiding the stacking-context issues that broke admin menu clicks.

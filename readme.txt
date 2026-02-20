@@ -4,7 +4,7 @@ Tags:              admin, colour, color, theme, personalise, night mode, dark mo
 Requires at least: 6.8
 Tested up to:      6.9
 Requires PHP:      8.3
-Stable tag:        1.0.1
+Stable tag:        1.0.2
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,12 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 
 == Changelog ==
 
+= 1.0.2 =
+* Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts.
+* Added Pest 4 test suite with Brain Monkey for WordPress function mocking.
+* Added Vitest 4 for JavaScript unit testing.
+* Developer tooling: composer test and npm test scripts.
+
 = 1.0.1 =
 * Night mode rewritten: replaced `filter: invert()` approach with explicit `background-color`, `color`, and `border-color` overrides across all key admin elements (sidebar, admin bar, content area, headings, form inputs, buttons, notices, list tables, metaboxes, cards, screen options, footer). No `filter` property is used — avoids stacking-context issues that broke admin menu clicks.
 * Night mode now covers the admin sidebar and admin bar with dark colours independently of the accent colour choice.
@@ -92,6 +98,9 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 * Clean paginated uninstall routine.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Developer tooling only — i18n support and test suites added. No database or UI changes.
 
 = 1.0.1 =
 Night mode CSS reworked; no database changes. Safe to update.
