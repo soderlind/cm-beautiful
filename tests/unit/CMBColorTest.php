@@ -136,3 +136,36 @@ it('returns white for invalid contrast input', function () {
 	expect(CMB_Color::contrast_color('invalid'))->toBe('#ffffff');
 	expect(CMB_Color::contrast_color(''))->toBe('#ffffff');
 });
+
+// --- WCAG contrast for darkened tones ----------------------------------------
+
+it('computes correct contrast for darkened accent tones', function () {
+	// A light accent like pale yellow needs black text.
+	$lightAccent = '#fff9c4'; // Pale yellow
+	expect(CMB_Color::contrast_color($lightAccent))->toBe('#000000');
+
+	// Darkened versions of a light color should still get appropriate contrast.
+	$d10 = CMB_Color::darken_hex($lightAccent, 10);
+	$d20 = CMB_Color::darken_hex($lightAccent, 20);
+	$d30 = CMB_Color::darken_hex($lightAccent, 30);
+
+	// All darkened tones of pale yellow should still use black text (WCAG).
+	expect(CMB_Color::contrast_color($d10))->toBe('#000000');
+	expect(CMB_Color::contrast_color($d20))->toBe('#000000');
+	expect(CMB_Color::contrast_color($d30))->toBe('#000000');
+});
+
+it('computes correct contrast for very dark colors', function () {
+	// Very dark colors need white text.
+	$darkAccent = '#1a1a2e'; // Very dark blue
+	expect(CMB_Color::contrast_color($darkAccent))->toBe('#ffffff');
+
+	$d10 = CMB_Color::darken_hex($darkAccent, 10);
+	$d20 = CMB_Color::darken_hex($darkAccent, 20);
+	$d30 = CMB_Color::darken_hex($darkAccent, 30);
+
+	// Darkened versions remain dark and need white text.
+	expect(CMB_Color::contrast_color($d10))->toBe('#ffffff');
+	expect(CMB_Color::contrast_color($d20))->toBe('#ffffff');
+	expect(CMB_Color::contrast_color($d30))->toBe('#ffffff');
+});

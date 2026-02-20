@@ -86,6 +86,7 @@ The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Ev
 
 ### 1.0.2
 
+- **WCAG contrast compliance**: Admin sidebar and admin bar text colors now automatically switch between black and white based on the chosen accent color's luminance, ensuring readable contrast for any custom color.
 - Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts (`npm run i18n`).
 - Added Pest 4 test suite with Brain Monkey for WordPress function mocking (`composer test`).
 - Added Vitest 4 for JavaScript unit testing (`npm test`).

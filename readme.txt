@@ -76,6 +76,7 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 == Changelog ==
 
 = 1.0.2 =
+* Added WCAG-compliant contrast colors for admin sidebar and admin bar - text color automatically switches between black and white based on accent luminance.
 * Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts.
 * Added Pest 4 test suite with Brain Monkey for WordPress function mocking.
 * Added Vitest 4 for JavaScript unit testing.
@@ -100,7 +101,7 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 == Upgrade Notice ==
 
 = 1.0.2 =
-Developer tooling only — i18n support and test suites added. No database or UI changes.
+WCAG contrast compliance for custom accent colors. Developer tooling only otherwise — i18n support and test suites added. No database or UI changes.
 
 = 1.0.1 =
 Night mode CSS reworked; no database changes. Safe to update.

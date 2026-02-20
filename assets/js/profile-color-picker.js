@@ -172,15 +172,23 @@
 		var rgb     = hexToRgb( hex );
 		var d10rgb  = hexToRgb( d10 );
 		var d20rgb  = hexToRgb( d20 );
-		var contrast = contrastColor( hex );
+
+		// WCAG-compliant contrast colors for each tone.
+		var contrast    = contrastColor( hex );
+		var contrastD10 = contrastColor( d10 );
+		var contrastD20 = contrastColor( d20 );
+		var contrastD30 = contrastColor( d30 );
 
 		// Plugin vars — consumed by every admin chrome rule via var(--cmb-accent…).
-		root.style.setProperty( '--cmb-accent',          hex );
-		root.style.setProperty( '--cmb-accent-d10',      d10 );
-		root.style.setProperty( '--cmb-accent-d20',      d20 );
-		root.style.setProperty( '--cmb-accent-d30',      d30 );
-		root.style.setProperty( '--cmb-accent-contrast', contrast );
-		root.style.setProperty( '--cmb-bg',              bg );
+		root.style.setProperty( '--cmb-accent',              hex );
+		root.style.setProperty( '--cmb-accent-d10',          d10 );
+		root.style.setProperty( '--cmb-accent-d20',          d20 );
+		root.style.setProperty( '--cmb-accent-d30',          d30 );
+		root.style.setProperty( '--cmb-accent-contrast',     contrast );
+		root.style.setProperty( '--cmb-accent-d10-contrast', contrastD10 );
+		root.style.setProperty( '--cmb-accent-d20-contrast', contrastD20 );
+		root.style.setProperty( '--cmb-accent-d30-contrast', contrastD30 );
+		root.style.setProperty( '--cmb-bg',                  bg );
 
 		// WP native vars — picked up by block editor + third-party code.
 		root.style.setProperty( '--wp-admin-theme-color',               hex );
