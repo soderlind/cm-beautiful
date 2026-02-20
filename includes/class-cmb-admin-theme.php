@@ -161,13 +161,21 @@ class CMB_Admin_Theme {
 		$rgb      = CMB_Color::hex_to_rgb( $accent );
 		$d10_rgb  = CMB_Color::hex_to_rgb( $d10 );
 		$d20_rgb  = CMB_Color::hex_to_rgb( $d20 );
-		$contrast = CMB_Color::contrast_color( $accent );
+
+		// WCAG-compliant contrast colors for each tone.
+		$contrast     = CMB_Color::contrast_color( $accent );
+		$contrast_d10 = CMB_Color::contrast_color( $d10 );
+		$contrast_d20 = CMB_Color::contrast_color( $d20 );
+		$contrast_d30 = CMB_Color::contrast_color( $d30 );
 
 		$a   = esc_attr( $accent );
 		$e10 = esc_attr( $d10 );
 		$e20 = esc_attr( $d20 );
 		$e30 = esc_attr( $d30 );
 		$ec  = esc_attr( $contrast );
+		$ec10 = esc_attr( $contrast_d10 );
+		$ec20 = esc_attr( $contrast_d20 );
+		$ec30 = esc_attr( $contrast_d30 );
 		$ebg = esc_attr( $bg );
 
 		return ":root {\n"
@@ -177,12 +185,15 @@ class CMB_Admin_Theme {
 			. "\t--wp-admin-theme-color-darker-10--rgb: {$d10_rgb};\n"
 			. "\t--wp-admin-theme-color-darker-20:      {$e20};\n"
 			. "\t--wp-admin-theme-color-darker-20--rgb: {$d20_rgb};\n"
-			. "\t--cmb-accent:          {$a};\n"
-			. "\t--cmb-accent-d10:      {$e10};\n"
-			. "\t--cmb-accent-d20:      {$e20};\n"
-			. "\t--cmb-accent-d30:      {$e30};\n"
-			. "\t--cmb-accent-contrast: {$ec};\n"
-			. "\t--cmb-bg:              {$ebg};\n"
+			. "\t--cmb-accent:              {$a};\n"
+			. "\t--cmb-accent-d10:          {$e10};\n"
+			. "\t--cmb-accent-d20:          {$e20};\n"
+			. "\t--cmb-accent-d30:          {$e30};\n"
+			. "\t--cmb-accent-contrast:     {$ec};\n"
+			. "\t--cmb-accent-d10-contrast: {$ec10};\n"
+			. "\t--cmb-accent-d20-contrast: {$ec20};\n"
+			. "\t--cmb-accent-d30-contrast: {$ec30};\n"
+			. "\t--cmb-bg:                  {$ebg};\n"
 			. "}\n\n";
 	}
 
@@ -214,12 +225,16 @@ class CMB_Admin_Theme {
 		// d10 = accent darkened 10 %
 		// d20 = accent darkened 20 %
 		// d30 = accent darkened 30 % (falls back to d20 for WP native – no WP var)
-		$a   = 'var(--cmb-accent,     var(--wp-admin-theme-color,          #2271b1))';
-		$d10 = 'var(--cmb-accent-d10, var(--wp-admin-theme-color-darker-10, #1a5c96))';
-		$d20 = 'var(--cmb-accent-d20, var(--wp-admin-theme-color-darker-20, #155d8a))';
-		$d30 = 'var(--cmb-accent-d30, var(--wp-admin-theme-color-darker-20, #155d8a))';
-		$ec  = 'var(--cmb-accent-contrast, #ffffff)';
-		$bg  = 'var(--cmb-bg, #f0f0f1)';
+		// ec* = WCAG contrast color for each tone (black or white depending on luminance)
+		$a    = 'var(--cmb-accent,     var(--wp-admin-theme-color,          #2271b1))';
+		$d10  = 'var(--cmb-accent-d10, var(--wp-admin-theme-color-darker-10, #1a5c96))';
+		$d20  = 'var(--cmb-accent-d20, var(--wp-admin-theme-color-darker-20, #155d8a))';
+		$d30  = 'var(--cmb-accent-d30, var(--wp-admin-theme-color-darker-20, #155d8a))';
+		$ec   = 'var(--cmb-accent-contrast, #ffffff)';
+		$ec10 = 'var(--cmb-accent-d10-contrast, #ffffff)';
+		$ec20 = 'var(--cmb-accent-d20-contrast, #ffffff)';
+		$ec30 = 'var(--cmb-accent-d30-contrast, #ffffff)';
+		$bg   = 'var(--cmb-bg, #f0f0f1)';
 
 		$css = '';
 
@@ -228,49 +243,106 @@ class CMB_Admin_Theme {
 			. "body.wp-admin, #wpwrap { background-color: {$bg}; }\n\n";
 
 		// ── Sidebar menu ──────────────────────────────────────────────────────
-		$css .= "/* --- Admin sidebar menu --- */\n"
+		// Text colors use WCAG-computed contrast vars for accessibility.
+		$css .= "/* --- Admin sidebar menu (WCAG contrast) --- */\n"
 			. "#adminmenuback, #adminmenuwrap, #adminmenu { background: {$a}; }\n\n"
 
-			. "#adminmenu a { color: rgba(255,255,255,.85); }\n"
-			. "#adminmenu a:hover { color: #fff; }\n"
-			. "#adminmenu div.wp-menu-image:before { color: rgba(255,255,255,.6); }\n\n"
+			. "#adminmenu a { color: {$ec}; opacity: 0.85; }\n"
+			. "#adminmenu a:hover { color: {$ec}; opacity: 1; }\n"
+			. "#adminmenu div.wp-menu-image:before { color: {$ec}; opacity: 0.6; }\n"
+			. "#adminmenu .collapse-button-label { color: {$ec}; }\n"
+			. "#collapse-button { color: {$ec}; }\n"
+			. "#collapse-button .collapse-button-icon { fill: {$ec}; }\n\n"
 
 			. "#adminmenu li.menu-top:hover,\n"
 			. "#adminmenu li.opensub > a.menu-top,\n"
-			. "#adminmenu li > a.menu-top:focus { color: #fff; background: {$d10}; }\n"
+			. "#adminmenu li > a.menu-top:focus { color: {$ec10}; opacity: 1; background: {$d10}; }\n"
 			. "#adminmenu li.menu-top:hover div.wp-menu-image:before,\n"
 			. "#adminmenu li.opensub > a.menu-top div.wp-menu-image:before,\n"
-			. "#adminmenu li > a.menu-top:focus div.wp-menu-image:before { color: #fff; }\n\n"
+			. "#adminmenu li > a.menu-top:focus div.wp-menu-image:before { color: {$ec10}; opacity: 1; }\n\n"
 
 			. "#adminmenu .wp-submenu,\n"
 			. "#adminmenu .wp-has-current-submenu .wp-submenu,\n"
 			. "#adminmenu .wp-has-current-submenu.opensub .wp-submenu { background: {$d20}; }\n"
-			. "#adminmenu .wp-submenu a { color: rgba(255,255,255,.7); }\n"
+			. "#adminmenu .wp-submenu a { color: {$ec20}; opacity: 0.85; }\n"
 			. "#adminmenu .wp-submenu a:focus,\n"
-			. "#adminmenu .wp-submenu a:hover { color: #fff; }\n"
-			. "#adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head { color: rgba(255,255,255,.7); }\n\n"
+			. "#adminmenu .wp-submenu a:hover { color: {$ec20}; opacity: 1; }\n"
+			. "#adminmenu .wp-has-current-submenu .wp-submenu .wp-submenu-head { color: {$ec20}; opacity: 0.85; }\n\n"
 
 			. "#adminmenu .current > a.menu-top,\n"
-			. "#adminmenu .wp-has-current-submenu > a.menu-top { background: {$d30}; color: #fff; }\n"
+			. "#adminmenu .wp-has-current-submenu > a.menu-top { background: {$d30}; color: {$ec30}; opacity: 1; }\n"
 			. "#adminmenu .current > .wp-menu-image:before,\n"
-			. "#adminmenu .wp-has-current-submenu > .wp-menu-image:before { color: #fff; }\n"
-			. "ul#adminmenu a.current { background: {$d30}; color: #fff; }\n"
+			. "#adminmenu .wp-has-current-submenu > .wp-menu-image:before { color: {$ec30}; opacity: 1; }\n"
+			. "ul#adminmenu a.current { background: {$d30}; color: {$ec30}; opacity: 1; }\n"
 			. "#adminmenu .current:after,\n"
-			. "#adminmenu .wp-has-current-submenu:after { border-right-color: #f0f0f1; }\n\n";
+			. "#adminmenu .wp-has-current-submenu:after { border-right-color: {$bg}; }\n\n";
 
 		// ── Admin bar ─────────────────────────────────────────────────────────
-		$css .= "/* --- Admin bar --- */\n"
+		// Text colors use WCAG-computed contrast vars for accessibility.
+		$css .= "/* --- Admin bar (WCAG contrast) --- */\n"
 			. "#wpadminbar { background: {$a}; }\n"
+			// Hover/focus states on top-level items.
 			. "#wpadminbar .ab-top-menu > li.hover > .ab-item,\n"
 			. "#wpadminbar .ab-top-menu > li > .ab-item:focus,\n"
 			. ".no-js #wpadminbar .ab-top-menu > li:hover > .ab-item,\n"
 			. "#wpadminbar .ab-top-menu > li.ab-top-secondary.hover > .ab-item,\n"
 			. "#wpadminbar .ab-top-menu > li.ab-top-secondary > .ab-item:focus,\n"
 			. ".no-js #wpadminbar .ab-top-menu > li.ab-top-secondary:hover > .ab-item "
-			. "{ background: {$d20}; color: #fff; }\n"
-			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a,\n"
+			. "{ background: {$d20}; color: {$ec20}; }\n"
+			// All admin bar text elements use WCAG contrast (comprehensive).
+			. "#wpadminbar,\n"
+			. "#wpadminbar a,\n"
 			. "#wpadminbar .ab-item,\n"
-			. "#wpadminbar .ab-item:hover { color: rgba(255,255,255,.85); }\n\n";
+			. "#wpadminbar .ab-label,\n"
+			. "#wpadminbar .ab-empty-item,\n"
+			. "#wpadminbar .quicklinks .ab-empty-item,\n"
+			. "#wpadminbar > #wp-toolbar span,\n"
+			. "#wpadminbar > #wp-toolbar > #wp-admin-bar-root-default li a,\n"
+			. "#wpadminbar #wp-admin-bar-site-name > .ab-item,\n"
+			. "#wpadminbar #wp-admin-bar-my-account > .ab-item { color: {$ec}; }\n"
+			// Hover states.
+			. "#wpadminbar a:hover,\n"
+			. "#wpadminbar .ab-item:hover,\n"
+			. "#wpadminbar .ab-label:hover { color: {$ec}; }\n"
+			// .ab-label in various contexts (My Account display name, etc).
+			// Using !important to override WP core's high-specificity selectors.
+			. "#wpadminbar .ab-label,\n"
+			. "#wpadminbar #wp-admin-bar-my-account .ab-label,\n"
+			. "#wpadminbar .ab-top-menu > li > .ab-item > .ab-label,\n"
+			. "#wpadminbar .quicklinks .ab-label,\n"
+			. "#wpadminbar .quicklinks > ul > li > a > .ab-label,\n"
+			. "#wpadminbar .display-name,\n"
+			. "#wpadminbar #wp-admin-bar-my-account .display-name { color: {$ec} !important; }\n"
+			// Icons in admin bar (dashicons, SVG, etc).
+			. "#wpadminbar .ab-icon,\n"
+			. "#wpadminbar .ab-icon:before,\n"
+			. "#wpadminbar .ab-item .ab-icon:before,\n"
+			. "#wpadminbar #adminbarsearch:before,\n"
+			. "#wpadminbar #wp-admin-bar-wp-logo > .ab-item .ab-icon:before,\n"
+			. "#wpadminbar .quicklinks li a:before { color: {$ec}; }\n"
+			// WP logo specific.
+			. "#wpadminbar #wp-admin-bar-wp-logo > .ab-item { color: {$ec}; }\n"
+			. "#wpadminbar #wp-admin-bar-wp-logo:hover > .ab-item { background: {$d20}; color: {$ec20}; }\n"
+			// Submenus use darkened background with appropriate contrast.
+			. "#wpadminbar .ab-submenu,\n"
+			. "#wpadminbar .ab-sub-wrapper,\n"
+			. "#wpadminbar ul.ab-submenu,\n"
+			. "#wpadminbar .quicklinks .menupop ul.ab-sub-secondary { background: {$d20}; }\n"
+			. "#wpadminbar .ab-submenu .ab-item,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item,\n"
+			. "#wpadminbar .ab-submenu a,\n"
+			. "#wpadminbar .ab-sub-wrapper a { color: {$ec20}; }\n"
+			// Submenu .ab-label needs !important for specificity.
+			. "#wpadminbar .ab-submenu .ab-label,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-label { color: {$ec20} !important; }\n"
+			. "#wpadminbar .ab-submenu .ab-item:hover,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item:hover,\n"
+			. "#wpadminbar .ab-submenu .ab-item:focus,\n"
+			. "#wpadminbar .ab-sub-wrapper .ab-item:focus,\n"
+			. "#wpadminbar .ab-submenu a:hover,\n"
+			. "#wpadminbar .ab-sub-wrapper a:hover { color: {$ec20}; background: {$d30}; }\n"
+			// Account/avatar area.
+			. "#wpadminbar #wp-admin-bar-my-account.with-avatar > a img { border-color: {$ec}; }\n\n";
 
 		// ── Primary buttons ───────────────────────────────────────────────────
 		$css .= "/* --- Primary buttons --- */\n"

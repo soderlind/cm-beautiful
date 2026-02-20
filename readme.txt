@@ -4,7 +4,7 @@ Tags:              admin, colour, color, theme, personalise, night mode, dark mo
 Requires at least: 6.8
 Tested up to:      6.9
 Requires PHP:      8.3
-Stable tag:        1.0.2
+Stable tag:        1.1.0
 License:           GPL-2.0-or-later
 License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,14 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 
 == Changelog ==
 
+= 1.1.0 =
+* WCAG 2.1 contrast compliance for custom accents: contrast CSS variables (--cmb-accent-contrast, --cmb-accent-d10-contrast, etc.) auto-select black or white text based on luminance.
+* Full admin bar coverage: .ab-item, .ab-icon, .ab-label, .ab-submenu, and collapse button all respect WCAG contrast.
+* JavaScript live preview updates contrast colors in real time as you pick a custom color.
+* Higher-specificity selectors with !important ensure contrast overrides WordPress core styles.
+
 = 1.0.2 =
+* Added WCAG-compliant contrast colors for admin sidebar and admin bar - text color automatically switches between black and white based on accent luminance.
 * Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts.
 * Added Pest 4 test suite with Brain Monkey for WordPress function mocking.
 * Added Vitest 4 for JavaScript unit testing.
@@ -99,8 +106,11 @@ WordPress 6.8 or higher and PHP 8.3 or higher.
 
 == Upgrade Notice ==
 
+= 1.1.0 =
+Full WCAG 2.1 contrast compliance for admin bar and sidebar. No database changes.
+
 = 1.0.2 =
-Developer tooling only — i18n support and test suites added. No database or UI changes.
+WCAG contrast compliance for custom accent colors. Developer tooling only otherwise — i18n support and test suites added. No database or UI changes.
 
 = 1.0.1 =
 Night mode CSS reworked; no database changes. Safe to update.

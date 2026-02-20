@@ -84,8 +84,17 @@ The only runtime Composer dependency is `yahnis-elsts/plugin-update-checker`. Ev
 
 ## Changelog
 
+### 1.1.0
+
+- **Full WCAG 2.1 contrast compliance**: All admin chrome elements (sidebar menu, admin bar, collapse button) now use calculated contrast colors based on relative luminance.
+- Contrast CSS variables for darkened accent tones (`--cmb-accent-d10-contrast`, `--cmb-accent-d20-contrast`, `--cmb-accent-d30-contrast`) ensure readable text on hover/active states.
+- Admin bar elements (`.ab-item`, `.ab-icon`, `.ab-label`, `.ab-submenu`) receive proper contrast colors.
+- JavaScript live preview applies contrast colors in real time during custom color selection.
+- Higher-specificity CSS selectors ensure contrast overrides WordPress core admin bar styles.
+
 ### 1.0.2
 
+- **WCAG contrast compliance**: Admin sidebar and admin bar text colors now automatically switch between black and white based on the chosen accent color's luminance, ensuring readable contrast for any custom color.
 - Added internationalization (i18n) support with translatable preset labels and WP-CLI build scripts (`npm run i18n`).
 - Added Pest 4 test suite with Brain Monkey for WordPress function mocking (`composer test`).
 - Added Vitest 4 for JavaScript unit testing (`npm test`).
